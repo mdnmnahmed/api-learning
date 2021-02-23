@@ -16,6 +16,12 @@ app.get('/', (req, res) => {
     });
 });
 
+app.get('/users', (req, res) => {
+    res.status(200).json({
+        message: 'Hello Num'
+    });
+});
+
 
 //Create Server
 const PORT = process.env.PORT || 5000;
