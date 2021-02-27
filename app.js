@@ -1,11 +1,11 @@
 const express = require('express');
 const app = express();
-
+const bodyParser = require('body-parser')
 
 //Middleares
+app.use(bodyParser.json())
 const productRoutes = require('./api/routes/productRoutes');
 app.use('/products', productRoutes);
-
 
 //Routes
 app.get('/', (req, res) => {
