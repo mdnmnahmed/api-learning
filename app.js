@@ -1,12 +1,10 @@
-const app = require('express')();
+const express = require('express');
+const app = express();
 
 
 //Middleares
-app.use((req, res, next) => {
-    res.status(200).json({
-        message: 'This is For every route'
-    });
-});
+const productRoutes = require('./api/routes/productRoutes');
+app.use('/products', productRoutes);
 
 
 //Routes
@@ -16,11 +14,6 @@ app.get('/', (req, res) => {
     });
 });
 
-app.get('/users', (req, res) => {
-    res.status(200).json({
-        message: 'Hello Num'
-    });
-});
 
 
 //Create Server
