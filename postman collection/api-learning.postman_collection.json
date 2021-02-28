@@ -249,6 +249,25 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "error",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/prod",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"prod"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
