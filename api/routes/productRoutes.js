@@ -3,56 +3,114 @@ const router = express.Router();
 const productModel = require('../models/productModel');
 
 router.get('/', (req, res) => {
-    res.status(200).json({
-        message: 'Products Data'
-    });
+    productModel.find()
+        .exec()
+        .then(data => {
+            if (data.length > 0) {
+                res.status(200).json({
+                    message: 'All Products Fetched',
+                    data
+                });
+            } else {
+                res.status(200).json({
+                    message: 'There is no Data',
+                    data
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: 'Failed to fetch All Products',
+                err
+            })
+        });
 });
 
 router.post('/', (req, res) => {
     const newProduct = new productModel(req.body);
-    // const newContactData = new contactsModel(req.body);
 
     newProduct.save()
         .then(data => {
-            console.log(data);
+            res.status(201).json({
+                message: 'New Product saved',
+                data: newProduct
+            });
         })
-        .catch(err=>{
-            console.log(err);
+        .catch(err => {
+            res.status(500).json({
+                message: 'Failed to save new Product',
+                data: newProduct
+            });
         })
-
-    res.status(201).json({
-        message: 'Products Data in POST Req',
-        data: newProduct
-    });
 });
 
 router.get('/:productId', (req, res) => {
-    const id = req.params.productId;
-    if (id == 'special') {
-        res.status(200).json({
-            message: 'Products Special ID',
-            id: id
-        });
-    } else {
-        res.status(200).json({
-            message: 'Products Others ID',
-            id: id
-        });
-    }
+    const { productId } = req.params;
+    productModel.findById(productId)
+        .exec()
+        .then(data => {
+            if (data) {     //For checking Data is not Null
+                res.status(200).json({
+                    message: 'Product Found',
+                    data
+                })
+            } else {
+                res.status(500).json({
+                    message: 'Product Not Found',
+                    data
+                })
+            }
+        })
+        .then(err => {
+            res.status(500).json({
+                message: 'Product Not Found',
+                err: err
+            })
+        })
 });
 
 
 router.patch('/:productId', (req, res) => {
-    res.status(200).json({
-        message: 'Updated Product Data'
-    })
+    const { productId: _id } = req.params; //Extracting productId & giving a name _id at the same time
+    const updateProductData = req.body;
+    productModel.findByIdAndUpdate(_id, updateProductData, { new: true })
+        .then(data => {
+            res.status(200).json({
+                message: 'Product Updated',
+                data
+            })
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: 'Failed to Update Product',
+                err
+            })
+        })
+
 });
 
 router.delete('/:productId', (req, res) => {
     const { productId } = req.params;
-    res.status(200).json({
-        message: `${productId} Product is Deleted`
-    })
+    productModel.findByIdAndRemove(productId)
+        .then(data => {
+            if (data) {
+                res.status(200).json({
+                    message: 'Product deleted',
+                    data
+                });
+            } else {
+                res.status(500).json({
+                    message: 'Failed to delete product, product not Found',
+                    data
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: 'Failed to delete product',
+                err
+            });
+        })
 });
 
 
