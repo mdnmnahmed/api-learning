@@ -5,8 +5,14 @@ const productSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         default: new mongoose.Types.ObjectId()
     },
-    name: String,
-    price: Number
+    name: {
+        type: String,
+        required: true
+    },
+    price: {
+        type: Number,
+        required: true
+    }
 });
 
 module.exports = mongoose.model('api-learning-product', productSchema);

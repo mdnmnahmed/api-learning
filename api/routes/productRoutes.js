@@ -39,7 +39,7 @@ router.post('/', (req, res) => {
         .catch(err => {
             res.status(500).json({
                 message: 'Failed to save new Product',
-                data: newProduct
+                err
             });
         })
 });
@@ -64,7 +64,7 @@ router.get('/:productId', (req, res) => {
         .then(err => {
             res.status(500).json({
                 message: 'Product Not Found',
-                err: err
+                err
             })
         })
 });
