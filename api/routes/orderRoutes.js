@@ -3,43 +3,43 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
     res.status(200).json({
-        message: 'Products Data'
+        message: 'Orders Data'
     });
 });
 
 router.post('/', (req, res) => {
     res.status(201).json({
-        message: 'Products Data in POST Req',
+        message: 'New Order Data',
         data: req.body
     });
 });
 
-router.get('/:productId', (req, res) => {
-    const id = req.params.productId;
+router.get('/:orderId', (req, res) => {
+    const id = req.params.orderId;
     if (id == 'special') {
         res.status(200).json({
-            message: 'Products Special ID',
+            message: 'Order Special ID',
             id: id
         });
     } else {
         res.status(200).json({
-            message: 'Products Others ID',
+            message: 'Order Others ID',
             id: id
         });
     }
 });
 
 
-router.patch('/:productId', (req, res) => {
+router.patch('/:orderId', (req, res) => {
     res.status(200).json({
-        message: 'Updated Product Data'
+        message: 'Updated Orders Data'
     })
 });
 
-router.delete('/:productId', (req, res) => {
-    const { productId } = req.params;
+router.delete('/:orderId', (req, res) => {
+    const { orderId } = req.params;
     res.status(200).json({
-        message: `${productId} Product is Deleted`
+        message: `${orderId} Order is Deleted`
     })
 });
 
