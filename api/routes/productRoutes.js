@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const productModel = require('../models/productModel');
 
 router.get('/', (req, res) => {
     res.status(200).json({
@@ -8,9 +9,20 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
+    const newProduct = new productModel(req.body);
+    // const newContactData = new contactsModel(req.body);
+
+    newProduct.save()
+        .then(data => {
+            console.log(data);
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+
     res.status(201).json({
         message: 'Products Data in POST Req',
-        data: req.body
+        data: newProduct
     });
 });
 
