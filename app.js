@@ -6,16 +6,16 @@ require('dotenv').config();
 
 //Middleares
     //CORS error Setup
-// app.use((req, res, next) => {
-//     res.header('Access-Control-Allow-Origin', '*'); //  https://nnn.web.app
-//     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authoriztion');
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*'); //  https://nnn.web.app
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authoriztion');
 
-//     if (req.method === 'OPTIONS') {
-//         res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, PATCH, DELETE');
-//         return res.status(200).json({});
-//     }
-//     next();
-// })
+    if (req.method === 'OPTIONS') {
+        res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, PATCH, DELETE');
+        return res.status(200).json({});
+    }
+    next();
+})
 app.use(bodyParser.json());
 // app.use(morgan('dev'));
 
