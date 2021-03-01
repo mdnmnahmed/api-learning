@@ -2,9 +2,11 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const orderModel = require('../models/orderModel');
+const productModel = require('../models/productModel');
 
 router.get('/', (req, res) => {
     orderModel.find()
+        .populate('product', 'name price _id')
         .then((data) => {
             res.status(200).json({
                 message: 'All orders fetched',
@@ -44,7 +46,7 @@ router.post('/', (req, res) => {
 router.get('/:orderId', (req, res) => {
     const { orderId } = req.params;
     orderModel.findById(orderId)
-        .exec()
+        .populate('product', 'name price _id')
         .then(data => {
             res.status(200).json({
                 message: 'Order Fetched',
