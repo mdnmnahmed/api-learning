@@ -1,32 +1,62 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
+const orderModel = require('../models/orderModel');
 
 router.get('/', (req, res) => {
-    res.status(200).json({
-        message: 'Orders Data'
-    });
+    orderModel.find()
+        .then((data) => {
+            res.status(200).json({
+                message: 'All orders fetched',
+                data
+            });
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: 'Error in Fetching Orders',
+                err
+            })
+        })
 });
 
 router.post('/', (req, res) => {
-    res.status(201).json({
-        message: 'New Order Data',
-        data: req.body
-    });
+    const newOrderData = new orderModel({
+        _id: mongoose.Types.ObjectId(),
+        quantity: req.body.quantity,
+        product: req.body.productId
+    })
+
+    newOrderData.save()
+        .then(data => {
+            res.status(201).json({
+                message: 'New Order Data Created',
+                data
+            });
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: 'Error in New Order Data Created',
+                err
+            });
+        })
 });
 
 router.get('/:orderId', (req, res) => {
-    const id = req.params.orderId;
-    if (id == 'special') {
-        res.status(200).json({
-            message: 'Order Special ID',
-            id: id
-        });
-    } else {
-        res.status(200).json({
-            message: 'Order Others ID',
-            id: id
-        });
-    }
+    const { orderId } = req.params;
+    orderModel.findById(orderId)
+        .exec()
+        .then(data => {
+            res.status(200).json({
+                message: 'Order Fetched',
+                data
+            })
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: 'Order not Found',
+                err
+            })
+        })
 });
 
 
@@ -38,9 +68,26 @@ router.patch('/:orderId', (req, res) => {
 
 router.delete('/:orderId', (req, res) => {
     const { orderId } = req.params;
-    res.status(200).json({
-        message: `${orderId} Order is Deleted`
-    })
+    orderModel.findByIdAndRemove(orderId)
+        .then(data => {
+            if (data) {
+                res.status(200).json({
+                    message: 'Order Deleted',
+                    data
+                })
+            } else {
+                res.status(500).json({
+                    message: 'Failed to Delete Order',
+                    data
+                })
+            }
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: 'Failed to Delete Order',
+                err
+            })
+        })
 });
 
 
