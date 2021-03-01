@@ -28,12 +28,11 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
     const newProduct = new productModel(req.body);
-
     newProduct.save()
         .then(data => {
             res.status(201).json({
                 message: 'New Product created successfully',
-                data: newProduct
+                data
             });
         })
         .catch(err => {
@@ -43,6 +42,24 @@ router.post('/', (req, res) => {
             });
         })
 });
+
+// ***Without Image***
+// router.post('/', (req, res) => {
+//     const newProduct = new productModel(req.body);
+//     newProduct.save()
+//         .then(data => {
+//             res.status(201).json({
+//                 message: 'New Product created successfully',
+//                 data
+//             });
+//         })
+//         .catch(err => {
+//             res.status(500).json({
+//                 message: 'Failed to save new Product',
+//                 err
+//             });
+//         })
+// });
 
 router.get('/:productId', (req, res) => {
     const { productId } = req.params;
