@@ -12,6 +12,13 @@ const productSchema = mongoose.Schema({
     price: {
         type: Number,
         required: true
+    },
+    productImg: {
+        type: String
+    },
+    created_at: {
+        type: Date,
+        default: new Date()
     }
 });
 

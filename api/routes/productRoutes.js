@@ -1,6 +1,38 @@
 const express = require('express');
 const router = express.Router();
 const productModel = require('../models/productModel');
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads');
+    },
+    filename: (req, file, cb) => {
+        //Assigning a Name to the File
+        const [extension, ...nameParts] = file.originalname.split('.').reverse();
+        let fileNamePart = nameParts.reverse();
+        fileNamePart = nameParts.toString();
+        fileNamePart = fileNamePart.replace(",", "_");
+        myFileName = fileNamePart + '__num_' + Date.now() + '.' + extension;
+
+        cb(null, myFileName);
+    }
+});
+
+const fileFilter = (req, file, cb) => {
+    const validExtensions = ["image/jpg", "image/jpeg", "image/png", "image/gif"];
+    const isValidExtension = validExtensions.indexOf(file.mimetype) > -1;
+
+    isValidExtension ? cb(null, true) : cb(new Error('Invalid File Type'), false);
+}
+
+const upload = multer({
+    storage,
+    limits: {
+        fileSize: 1024 * 1024 * 2   //2 MB (fileSize: takes in bytes)
+    },
+    fileFilter
+})
 
 router.get('/', (req, res) => {
     productModel.find()
@@ -26,8 +58,23 @@ router.get('/', (req, res) => {
         });
 });
 
-router.post('/', (req, res) => {
-    const newProduct = new productModel(req.body);
+// ***With Image***
+router.post('/', upload.single('productImage'), (req, res) => {
+    console.log(req.file);
+
+    const newProductData = {
+        name: req.body.name,
+        price: req.body.price,
+        productImg: req.file.path
+    }
+
+    const newProduct = new productModel(newProductData);
+    // console.log(newProduct);
+    res.status(201).json({
+        message: 'New Product created successfully',
+        data: newProduct
+    });
+    return;
     newProduct.save()
         .then(data => {
             res.status(201).json({

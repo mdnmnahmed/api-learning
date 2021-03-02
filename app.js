@@ -1,11 +1,13 @@
-const app = require('express')();
+const express = require('express');
+const app = express();
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
 //Middleares
-    //CORS error Setup
+app.use('uploads/', express.static('uploads'));
+//CORS error Setup
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*'); //  https://nnn.web.app
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authoriztion');
